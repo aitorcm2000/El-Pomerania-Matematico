@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
+import tile.TileManager;
 
 // Definición de la clase GamePanel que extiende JPanel, lo que significa que esta clase representa un panel
 // dentro de una ventana donde se puede dibujar y colocar componentes.
@@ -38,10 +39,10 @@ public class GamePanel extends JPanel implements Runnable{
     // para ejecutar operaciones que pueden bloquear el hilo principal, como operaciones de red o cálculos intensivos.
     Thread gameThread;
     
+    TileManager tileM =  new TileManager(this);
+    
     KeyHandler keyH = new KeyHandler();
     Player player = new Player(this, keyH);
-
-    
 
     // Constructor de la clase GamePanel
     public GamePanel() {
@@ -109,9 +110,9 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     // Método para actualizar la información del juego.
-public void update(){
-    player.update();
-}
+    public void update(){
+        player.update();
+    }
 
 
     // Método para dibujar componentes en el panel.
@@ -119,8 +120,9 @@ public void update(){
         super.paintComponent(g); // Llamada al método de la clase padre para realizar las operaciones de pintado estándar.
 
         Graphics2D g2 = (Graphics2D)g; // Conversión del objeto Graphics a Graphics2D para acceder a métodos más avanzados.
+        tileM.draw(g2);//dibujamos el mapa
         
-        player.draw(g2);
+        player.draw(g2);//dibujamos al jugador
         
         g2.dispose(); // Liberar recursos gráficos.
     }

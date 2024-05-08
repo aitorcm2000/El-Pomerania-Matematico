@@ -1,0 +1,23 @@
+// Creación de una nueva ventana utilizando la clase JFrame
+        JFrame ventana = new JFrame();
+
+        // Establecer la acción que se realizará cuando se cierre la ventana
+        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Crear una instancia del menú inicial
+        MenuInicial menuInicial = new MenuInicial();
+
+        // Agregar el menú inicial a la ventana
+        ventana.add(menuInicial);
+        
+        // Establecer el tamaño de la ventana automáticamente según su contenido
+        ventana.pack();
+        
+        // Establecer el título de la ventana
+        ventana.setTitle("Math Pomeranian RPG");
+
+        // Establecer la ubicación de la ventana en el centro de la pantalla
+        ventana.setLocationRelativeTo(null);
+
+        // Hacer visible la ventana, mostrándola en la pantalla
+        ventana.setVisible(true);
