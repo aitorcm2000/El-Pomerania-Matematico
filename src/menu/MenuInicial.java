@@ -1,21 +1,28 @@
 
-package menuInicial;
+package menu;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import main.VentanaJuego;
+import main.GamePanel;
 
-public class MenuInicial extends JPanel {
+public class MenuInicial extends JFrame {
     
     private JButton btnJugar;
-    private boolean btnJugarPulsado;
+    public boolean btnJugarPulsado;
     private JButton btnInicioSesion;
-    private boolean btnInicioPulsado;
+    public boolean btnInicioPulsado;
     private JButton btnPuntuaciones;
-    private boolean btnPuntuacionesPulsado;
+    public boolean btnPuntuacionesPulsado;
+    
+    private final int anchoPantalla = 768; //768 pixeles
+    private final int altoPantalla = 576; //576 pixeles
     
     public MenuInicial() {
+        
+        // Establecer las dimensiones preferidas del panel para que coincidan con el tamaño de la pantalla.
+        this.setPreferredSize(new Dimension(anchoPantalla, altoPantalla));
+        
         // Establecer el diseño del panel
         setLayout(new GridLayout(3, 1));
         
@@ -23,6 +30,9 @@ public class MenuInicial extends JPanel {
         btnJugar = new JButton("Jugar");
         btnInicioSesion = new JButton("Inicio de Sesión");
         btnPuntuaciones = new JButton("Puntuaciones");
+        btnJugarPulsado = false;
+        btnInicioPulsado = false;
+        btnPuntuacionesPulsado = false;
         
         // Añadir botones al panel
         add(btnJugar);
@@ -34,7 +44,9 @@ public class MenuInicial extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Acción para iniciar el GamePanel
-                iniciarJuego();
+                this.dispose();
+                GamePanel gp = new GamePanel();
+                gp.setVisible(true);
             }
         });
         
@@ -59,17 +71,18 @@ public class MenuInicial extends JPanel {
         // Lógica para iniciar el GamePanel
         // Aquí deberías crear una instancia de GamePanel y añadirla a una ventana JFrame.
         // Por simplicidad, supondré que tienes una clase llamada VentanaJuego.
-        VentanaJuego ventanaJuego = new VentanaJuego();
-        ventanaJuego.setVisible(true);
+        btnJugarPulsado = true;
     }
     
     private void iniciarSesion() {
         // Lógica para iniciar sesión
         // Por ejemplo, abrir un cuadro de diálogo para iniciar sesión.
+        btnInicioPulsado = false;
     }
     
     private void mostrarPuntuaciones() {
         // Lógica para mostrar las puntuaciones
         // Por ejemplo, abrir una ventana que muestre las puntuaciones almacenadas.
+        btnPuntuacionesPulsado = false;
     }
 }

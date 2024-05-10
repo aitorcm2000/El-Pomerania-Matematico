@@ -17,9 +17,9 @@ public class TileManager {
     public TileManager(GamePanel gp) {
         this.gp = gp;
         tile = new Tile[10];
-        mapaNumTiles = new int [gp.maxColPantalla][gp.maxFilPantalla];
+        mapaNumTiles = new int [gp.maxColMundo][gp.maxFilMundo];
         getImagenTile();
-        cargarMapa();
+        cargarMapa("/recursos/mapas/mapa_02.txt");
     }
     public void getImagenTile(){
         try{
@@ -27,66 +27,70 @@ public class TileManager {
             tile[0].image = ImageIO.read(getClass().getResourceAsStream("/recursos/tiles/suelo_blanco.png"));
             
             tile[1] = new Tile();
-            tile[1].image = ImageIO.read(getClass().getResourceAsStream("/recursos/tiles/suelo_negro.png"));
+            tile[1].image = ImageIO.read(getClass().getResourceAsStream("/recursos/tiles/pared_negra.png"));
+            tile[1].collision = true;
             
             tile[2] = new Tile();
             tile[2].image = ImageIO.read(getClass().getResourceAsStream("/recursos/tiles/jaula_perro.png"));
+            tile[2].collision = true;
+            
+            tile[3] = new Tile();
+            tile[3].image = ImageIO.read(getClass().getResourceAsStream("/recursos/tiles/corazon.png"));
+            
+            tile[4] = new Tile();
+            tile[4].image = ImageIO.read(getClass().getResourceAsStream("/recursos/tiles/llave.png"));
+            
+            tile[5] = new Tile();
+            tile[5].image = ImageIO.read(getClass().getResourceAsStream("/recursos/tiles/ordenador.png"));
             
         }catch(IOException e){
             e.printStackTrace();
         }
     } // odio mi vida jaja
     
-    public void cargarMapa(){
-        try{
-            InputStream map = getClass().getResourceAsStream("/recursos/mapas/mapa_01.txt");
-            BufferedReader br = new BufferedReader(new InputStreamReader(map)); // es solo un formato para leer el txt
-            
-            int col = 0;
+    public void cargarMapa(String direccionArchivo) {
+        try {
+            InputStream map = getClass().getResourceAsStream(direccionArchivo);
+            BufferedReader br = new BufferedReader(new InputStreamReader(map));
+
             int fil = 0;
-            
-            while(col < gp.maxColPantalla && fil < gp.maxFilPantalla){
+            while (fil < gp.maxFilMundo) {
                 String linea = br.readLine();
-                
-                while(col < gp.maxColPantalla){
-                    String numeros[] = linea.split(" "); 
-                    int num = Integer.parseInt(numeros[col]);//cambiamos el string por int
+                if (linea == null) break; // Para salir si no hay más líneas en el archivo
+
+                String numeros[] = linea.split(" ");
+                int col = 0;
+                for (String numero : numeros) {
+                    int num = Integer.parseInt(numero);
                     mapaNumTiles[col][fil] = num;
                     col++;
+                    if (col >= gp.maxColMundo) break; // Para evitar desbordamiento de la matriz
                 }
-                
-                if(col == gp.maxColPantalla){
-                    col = 0;
-                    fil++;
-                }
+                fil++;
             }
             br.close();
-        }catch(Exception e){
-             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
     
-    public void draw(Graphics2D g2){
-        int col = 0;
-        int fil = 0;
-        int x = 0;
-        int y = 0;
-        
-        while(col < gp.maxColPantalla && fil < gp.maxFilPantalla){
-            
-            int numTile = mapaNumTiles[col][fil];
-            
-            g2.drawImage(tile[numTile].image, x, y, gp.tamañoTile, gp.tamañoTile, null);
-            col++;
-            x+= gp.tamañoTile;
-            
-            if(col == gp.maxColPantalla){ //16x12
-                col = 0;
-                x = 0; 
-                fil++;
-                y += gp.tamañoTile;
+    public void draw(Graphics2D g2) {
+        int filMundo = 0;
+        while (filMundo < gp.maxFilMundo) {
+            int colMundo = 0;
+            while (colMundo < gp.maxColMundo) {
+                int numTile = mapaNumTiles[colMundo][filMundo];
+                int mundoX = colMundo * gp.tamañoTile;
+                int mundoY = filMundo * gp.tamañoTile;
+                int pantallaX = mundoX - gp.player.mundoX + gp.player.pantallaX;
+                int pantallaY = mundoY - gp.player.mundoY + gp.player.pantallaY;
+
+                g2.drawImage(tile[numTile].image, pantallaX, pantallaY, gp.tamañoTile, gp.tamañoTile, null);
+                colMundo++;
             }
+            filMundo++;
         }
-        
     }
+
 }

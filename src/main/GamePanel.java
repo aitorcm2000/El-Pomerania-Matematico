@@ -28,9 +28,16 @@ public class GamePanel extends JPanel implements Runnable{
     
     // Cálculo del ancho y alto de la pantalla en píxeles, basado en el tamaño de los "tiles" escalados 
     // y el número máximo de columnas y filas en la pantalla.
-    private final int anchoPantalla = tamañoTile * maxColPantalla; //768 pixeles
-    private final int altoPantalla = tamañoTile * maxFilPantalla; //576 pixeles
+    public final int anchoPantalla = tamañoTile * maxColPantalla; //768 pixeles
+    public final int altoPantalla = tamañoTile * maxFilPantalla; //576 pixeles
     
+    //CONFIGURACION DEL MUNDO
+    public final int maxColMundo = 40;
+    public final int maxFilMundo = 40;
+    public final int anchoMundo = tamañoTile * maxColMundo;
+    public final int altoMundo = tamañoTile * maxFilMundo;
+    
+
     //FPS
     private int FPS = 60;
 
@@ -42,7 +49,9 @@ public class GamePanel extends JPanel implements Runnable{
     TileManager tileM =  new TileManager(this);
     
     KeyHandler keyH = new KeyHandler();
-    Player player = new Player(this, keyH);
+    public Player player = new Player(this, keyH);
+    
+    public CollisionChecker cc = new CollisionChecker(this);
 
     // Constructor de la clase GamePanel
     public GamePanel() {
